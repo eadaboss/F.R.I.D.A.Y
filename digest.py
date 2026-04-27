@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-JARVIS Morning Digest — 100% Free Version
+F.R.I.D.A.Y Morning Digest — 100% Free Version
 Uses Groq (free AI API) + Telegram + RSS feeds only.
 No paid services required.
 """
@@ -243,7 +243,7 @@ def is_recent(entry) -> bool:
 
 def fetch_rss(url: str) -> list:
     try:
-        feed = feedparser.parse(url, request_headers={"User-Agent": "JARVISDigest/1.0"})
+        feed = feedparser.parse(url, request_headers={"User-Agent": "F.R.I.D.A.YDigest/1.0"})
         articles = []
         for e in feed.entries[:25]:
             link = getattr(e, "link", "")
@@ -312,7 +312,7 @@ def summarize_section(section_name: str, articles: list, is_breaking: bool = Fal
 
     urgency_note = "Flag anything urgent or major with 🔴 at the start of that bullet." if is_breaking else ""
 
-    prompt = f"""You are JARVIS, a sharp AI briefing assistant delivering a morning news digest.
+    prompt = f"""You are F.R.I.D.A.Y, a sharp AI briefing assistant delivering a morning news digest.
 
 Summarize the following articles for the section: "{section_name}"
 
@@ -366,13 +366,13 @@ def send_telegram(text: str):
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    log.info("JARVIS Digest starting...")
+    log.info("F.R.I.D.A.Y Digest starting...")
     seen = load_seen()
     now = datetime.now().strftime("%A, %B %d %Y — %I:%M %p")
 
     # Header message
     send_telegram(
-        f"🤖 *JARVIS Morning Digest*\n"
+        f"🤖 *F.R.I.D.A.Y Morning Digest*\n"
         f"_{now}_\n"
         f"{'─' * 28}\n"
     )
@@ -386,7 +386,7 @@ def main():
         time.sleep(1.5)  # small buffer between Groq calls
 
     # Footer
-    send_telegram("─" * 28 + "\n_End of digest. — JARVIS_")
+    send_telegram("─" * 28 + "\n_End of digest. — F.R.I.D.A.Y_")
 
     save_seen(seen)
     log.info("Digest complete.")
