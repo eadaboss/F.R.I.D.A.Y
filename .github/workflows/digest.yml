@@ -1,0 +1,33 @@
+name: JARVIS Morning Digest
+
+on:
+  schedule:
+    # 7:00 AM Eastern = 12:00 UTC (EST) or 11:00 UTC (EDT)
+    # Using 12:00 UTC to cover EST; adjust to 11:00 in summer if desired
+    - cron: "0 12 * * *"
+  workflow_dispatch:  # allows manual trigger from GitHub UI
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install anthropic feedparser requests
+
+      - name: Run JARVIS Digest
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          NEWSAPI_KEY: ${{ secrets.NEWSAPI_KEY }}
+        run: python digest.py
