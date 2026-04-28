@@ -1,0 +1,29 @@
+name: FRIDAY Daily Art
+
+on:
+  schedule:
+    - cron: "0 13 * * *"   # 9:00 AM Eastern (EST) — 1 hour after digest
+  workflow_dispatch:
+
+jobs:
+  art:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install groq feedparser requests youtube-transcript-api
+
+      - name: Run Art Script
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          ART_CHAT_ID: ${{ secrets.ART_CHAT_ID }}
+        run: python art.py
